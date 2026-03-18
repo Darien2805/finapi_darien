@@ -136,3 +136,17 @@ def high_memory():
     data = ['x' * 1024 * 1024] * 500  # ~500MB in-memory array
     time.sleep(5)
     return f"Allocated {len(data)} MB of memory temporarily."
+
+
+@app.route('/slow-endpoint')
+def slow_endpoint():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        response = requests.get(f"{BACKEND_API_BASE}/api/slow-endpoint")
+        result = response.text
+    except Exception as e:
+        result = {"error": str(e)}
+
+    return result
